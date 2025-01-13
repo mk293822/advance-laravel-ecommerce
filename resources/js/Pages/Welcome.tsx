@@ -18,7 +18,7 @@ export default function Welcome({
   return (
     <AuthenticatedLayout>
       <Head title="Welcome" />
-      <div className="hero bg-gray-200 h-[300px]">
+      <div className="hero bg-gray-800 h-[300px]">
         <div className="hero-content text-center">
           <div className="max-w-md">
             <h1 className="text-5xl font-bold">Hello there</h1>
