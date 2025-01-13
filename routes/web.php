@@ -5,7 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/welcome', function () {
+Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -14,7 +14,7 @@ Route::get('/welcome', function () {
     ]);
 });
 
-Route::redirect('/', 'dashboard');
+// Route::redirect('/', 'dashboard');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
