@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('slug')->unique();
-            $table->string('description');
+            $table->longText('description');
             $table->foreignId('department_id')->index()->constrained('departments');
             $table->foreignId('category_id')->index()->constrained('categories');
             $table->integer('quantity')->default(1);

@@ -37,9 +37,9 @@ class ProductVariations extends EditRecord
         $types = $this->record->variationTypes;
         $fields = [];
 
-        foreach ($types as $i => $type) {
-            $fields[] = TextInput::make('variation_type_' . ($type->id) . '.id')->hidden();
-            $fields[] = TextInput::make('variation_type_' . ($type->id) . '.name')->label($type->name);
+        foreach ($types as $type) {
+            $fields[] = TextInput::make('variation_type_' . $type->id . '.id')->hidden();
+            $fields[] = TextInput::make('variation_type_' . $type->id . '.name')->label($type->name);
         }
         // dd($types);
         return $form->schema([
@@ -83,9 +83,12 @@ class ProductVariations extends EditRecord
         $cartesianProduct = $this->cartesianProduct($variationTypes, $defaultQuantity, $defaultPrice);
         $mergeResult = [];
 
-        foreach ($cartesianProduct as $id => $product) {
+        foreach ($cartesianProduct as $product) {
+            // Debugging line to check the structure of $product
+            // dd($product);
+
             $optionIds = collect($product)
-                ->filter(fn($value, $key) => str_starts_with($key, 'variation_type_'))
+                ->filter(fn($_, $key) => str_starts_with($key, 'variation_type_'))
                 ->map(fn($option) => $option['id'])
                 ->values()
                 ->toArray();
@@ -93,8 +96,6 @@ class ProductVariations extends EditRecord
             $match = array_filter($existingData, function ($existingOptions) use ($optionIds) {
                 return $existingOptions["variation_type_option_ids"] === $optionIds;
             });
-
-//            dd($match);
 
             if (!empty($match)) {
                 $existingEntry = reset($match);
@@ -108,7 +109,7 @@ class ProductVariations extends EditRecord
 
             $mergeResult[] = $product;
         }
-//        dd($mergeResult);
+        //        dd($mergeResult);
         return $mergeResult;
     }
 
@@ -135,13 +136,14 @@ class ProductVariations extends EditRecord
             }
             $result = $temp;
         }
-        foreach ($result as &$combination) {
+        foreach ($result as $key => &$combination) {
             if (count($combination) === count($variationTypes)) {
                 $combination['quantity'] = $defaultQuantity;
                 $combination['price'] = $defaultPrice;
+                $combination['id'] = $key;
             }
         }
-//         dd($result);
+        //         dd($result);
         return $result;
     }
 
@@ -153,8 +155,8 @@ class ProductVariations extends EditRecord
 
         foreach ($data['variations'] as $option) {
             $variationTypeOptionIds = [];
-            foreach ($this->record->variationTypes as $i => $variationType) {
-                $variationTypeOptionIds[] = $option['variation_type_' . ($variationType->id)]['id'];
+            foreach ($this->record->variationTypes as $variationType) {
+                $variationTypeOptionIds[] = $option['variation_type_' . $variationType->id]['id'] ?? null;
             }
 
             // dd($option);
@@ -170,7 +172,7 @@ class ProductVariations extends EditRecord
         }
 
         $data['variations'] = $formattedData;
-//         dd($data);
+        //         dd($data);
         return $data;
     }
 
@@ -180,10 +182,10 @@ class ProductVariations extends EditRecord
     {
         $variations = $data['variations'];
         // dd($data, $record);
-//      dd($variations);
+        //      dd($variations);
         unset($data['variations']);
 
-//         dd($variations);
+        //         dd($variations);
         $variations = collect($variations)->map(function ($variation) {
             return [
                 'id' => $variation['id'],
@@ -192,10 +194,10 @@ class ProductVariations extends EditRecord
                 'quantity' => $variation['quantity'],
             ];
         })->toArray();
-//      $record->variations()->delete();
+
         $record->variations()->upsert($variations, ['id'], ['variation_type_option_ids', 'price', 'quantity']);
 
-//         dd($record);
+        //         dd($record);
         return $record;
     }
 }
