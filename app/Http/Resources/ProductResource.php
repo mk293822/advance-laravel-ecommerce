@@ -15,7 +15,7 @@ class ProductResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        return array(
           'id'=> $this->id,
           'title' => $this->title,
           'slug' => $this->slug,
@@ -24,50 +24,50 @@ class ProductResource extends JsonResource
           'description' => $this->description,
           'image'=> $this->getFirstMediaUrl('images', 'small'),
           'images' => $this->getMedia('images')->map(function ($image) {
-            return [
+            return array(
               'id' => $image->id,
               'thumb' => $image->getUrl('thumb'),
               'large' => $image->getUrl('large'),
               'small' => $image->getUrl('small'),
-            ];
+            );
           }),
-          'user' =>[
+          'user' => array(
             'name'=>$this->user->name,
             'id'=>$this->user->id,
-          ],
-          'department'=>[
+          ),
+          'department'=> array(
             'id'=>$this->department->id,
             'name'=>$this->department->name,
-          ],
+          ),
           'variationTypes' => $this->variationTypes->map(function ($variationType) {
-            return [
+            return array(
               'id' => $variationType->id,
               'name' => $variationType->name,
               'type' => $variationType->type,
               'options' => $variationType->options->map(function ($option) {
-                return [
+                return array(
                   'id' => $option->id,
                   'name' => $option->name,
                   'images' => $option->getMedia('images')->map(function ($image) {
-                    return [
+                    return array(
                       'id' => $image->id,
                       'thumb' => $image->getUrl('thumb'),
                       'large' => $image->getUrl('large'),
                       'small' => $image->getUrl('small'),
-                    ];
+                    );
                   })
-                ];
+                );
               }),
-            ];
+            );
           }),
           'variations' => $this->variations->map(function ($variation) {
-            return [
+            return array(
               'id' => $variation->id,
               'variation_type_option_ids' => $variation->variation_type_option_ids,
               'quantity' => $variation->quantity,
               'price' => $variation->price,
-            ];
+            );
           })
-        ];
+        );
     }
 }

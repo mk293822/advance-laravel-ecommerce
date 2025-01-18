@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Product, VariationType, VariationTypeOption } from "@/types";
 import { Head, router, useForm, usePage } from "@inertiajs/react";
-import { type } from "node:os";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Carousel from "@/Components/core/Carousel";
 import CurrencyFormatter from "@/Components/core/CurrencyFormatter";
@@ -24,6 +23,8 @@ function Show({
     price: null,
   });
 
+  // console.log(variationOptions);
+
   const { url } = usePage();
 
   const [selectedOptions, setSelectedOptions] = useState<
@@ -35,11 +36,11 @@ function Show({
       const option = selectedOptions[typeId];
       if (option.images.length > 0) return option.images;
     }
-    console.log(product.images);
+    // console.log(product.images);
     return product.images;
   }, [product, selectedOptions]);
 
-  console.log(images);
+  // console.log(images);
 
   const computedProduct = useMemo(() => {
     const selectedOptionIds = Object.values(selectedOptions)
@@ -66,7 +67,7 @@ function Show({
       const selectedOptionId: number = variationOptions[type.id];
       chooseOption(
         type.id,
-        type.options.find((op) => op.id == selectedOptionId || type.options[0]),
+        type.options.find((op) => op.id == selectedOptionId) || type.options[0],
         false
       );
     }
@@ -83,6 +84,7 @@ function Show({
     option: VariationTypeOption,
     updateRouter: boolean = true
   ) => {
+    // console.log(option);
     setSelectedOptions((preSelectedOptions) => {
       const newOptions = {
         ...preSelectedOptions,
@@ -195,7 +197,7 @@ function Show({
         ([typeId, option]: [string, VariationTypeOption]) => [typeId, option.id]
       )
     );
-    console.log(idsMap);
+    // console.log(idsMap);
     form.setData("option_ids", idsMap);
   }, [selectedOptions]);
 

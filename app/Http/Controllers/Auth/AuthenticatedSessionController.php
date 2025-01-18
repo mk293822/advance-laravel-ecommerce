@@ -6,6 +6,7 @@ use App\Enums\RolesEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
+use App\Services\CartService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,7 +30,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): \Symfony\Component\HttpFoundation\Response
+    public function store(LoginRequest $request, CartService $cartService): \Symfony\Component\HttpFoundation\Response
     {
         $request->authenticate();
 
@@ -42,11 +43,12 @@ class AuthenticatedSessionController extends Controller
         $route = '/';
 
         if ($user->hasRole([RolesEnum::Admin, RolesEnum::Vendor])) {
+          $cartService->movingCartItemsToDatabase($user->id);
             return Inertia::location(route('filament.admin.pages.dashboard'));
         } else {
             $route = route('dashboard', absolute: false);
         }
-
+      $cartService->movingCartItemsToDatabase($user->id);
         return redirect()->intended($route);
     }
 

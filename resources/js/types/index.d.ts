@@ -55,9 +55,28 @@ export type Product = {
   }>;
 };
 
+export type CartItems = {
+  title: string,
+  product_id: number,
+  id: number,
+  price: number,
+  quantity: number,
+  slug: string,
+  image:string,
+  options_ids: Record<string, number>,
+  options: VariationTypeOption[]
+}
+
 export type PaginationProps<T> = {
   data: Array<T>;
 };
+
+export type GroupedCartItems = {
+  user: User,
+  items: CartItems[],
+  totalQuantity: number,
+  totalPrice: number,
+}
 
 export type PageProps<
   T extends Record<string, unknown> = Record<string, unknown>
@@ -66,4 +85,8 @@ export type PageProps<
     user: User;
   };
   ziggy: Config & { location: string };
+  csrf_token: string;
+  totalQuantity: number;
+  totalPrice: number;
+  miniCartItems: CartItems[];
 };

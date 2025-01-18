@@ -7,6 +7,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-http": "*",
         "filament/filament": "^3.2",
         "filament/spatie-laravel-media-library-plugin": "^3.2",
         "inertiajs/inertia-laravel": "^2.0",
@@ -14,6 +15,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "spatie/laravel-permission": "^6.10",
+        "stripe/stripe-php": "^16.4",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {

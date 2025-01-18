@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Image } from "@/types";
 
 function Carousel({ images }: { images: Image[] }) {
-  const [selectedImage, setSelectedImage] = useState(images[0]);
+  const [selectedImage, setSelectedImage] = useState<Image>(images[0]);
   useEffect(() => {
     setSelectedImage(images[0]);
-  }, images);
+  }, [images]);
+  // console.log(images);
   return (
     <div className="flex gap-6">
       <div className="flex items-start gap-8">
@@ -21,6 +22,7 @@ function Carousel({ images }: { images: Image[] }) {
               }
               key={image.id}
             >
+              {/*<pre>{JSON.stringify(image.id)}</pre>*/}
               <img
                 src={image.thumb ? image.thumb : "/"}
                 alt=""
@@ -32,6 +34,7 @@ function Carousel({ images }: { images: Image[] }) {
       </div>
       <div className="carousel w-full">
         <div className="carousel-item w-full">
+          {/*<pre>{JSON.stringify(selectedImage.large)}</pre>*/}
           <img
             alt=""
             src={selectedImage.large}

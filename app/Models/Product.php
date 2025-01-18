@@ -15,9 +15,9 @@ class Product extends Model implements HasMedia
 {
     use InteractsWithMedia;
 
-    // protected $casts = [
-    //     "variations" => "array",
-    // ];
+//     protected $casts = [
+//         "variations" => "array",
+//     ];
 
     public function scopeForVendor(Builder $query): Builder
     {
@@ -27,6 +27,11 @@ class Product extends Model implements HasMedia
     public function scopePublished(Builder $query): Builder
     {
       return $query->where('status', ProductStatusEnum::Published);
+    }
+
+    public function scopeForWebsite(Builder $query): Builder
+    {
+      return $query->published();
     }
     public function registerMediaConversions(?Media $media = null): void
     {
@@ -60,4 +65,19 @@ class Product extends Model implements HasMedia
     {
         return $this->hasMany(VariationType::class);
     }
+
+  public function getPriceForOption($option_ids = [])
+  {
+    $option_ids = array_values($option_ids);
+    sort($option_ids);
+
+    foreach ($this->variations as $variation) {
+      $a = $variation->variation_type_option_ids;
+      sort($a);
+      if($option_ids == $a) {
+        return $variation->price !== null > $variation->price ? $variation->price : $this->price;
+      }
+    }
+    return $this->price;
+  }
 }
