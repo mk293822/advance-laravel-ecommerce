@@ -25,8 +25,8 @@ class CartService
      */
     public function addItemToCart(Product $product, int $quantity = 1, $option_ids = null): void
     {
-        if($option_ids === null){
-          $option_ids = $product->variationTypes->mapWithKeys( fn(VariationTypeOption $type) => [$type->id => $type->options[0]->id])->toArray();
+        if(!$option_ids){
+          $option_ids = $product->getFirstOptionsMap();
         }
 
         $price = $product->getPriceForOption($option_ids);
@@ -280,7 +280,7 @@ class CartService
         'user'=>$item->first()['user'],
         'items'=>$item->toArray(),
         'totalQuantity'=>$item->sum('quantity'),
-        'totalPrice'=>$item->map(fn($item)=>$item['price'] * $item['quantity'])
+        'totalPrice'=>$item->sum('price') * $item->sum('quantity'),
       ])->toArray();
   }
 

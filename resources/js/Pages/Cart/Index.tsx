@@ -5,7 +5,6 @@ import {Head, Link} from "@inertiajs/react";
 import CurrencyFormatter from "@/Components/core/CurrencyFormatter";
 import PrimaryButton from "@/Components/core/PrimaryButton";
 import {CreditCardIcon} from "@heroicons/react/24/outline";
-import index from "@/Pages/Cart/Index";
 import CartItem from "@/Components/app/CartItem";
 
 function Index(

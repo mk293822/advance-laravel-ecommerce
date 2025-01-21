@@ -12,6 +12,7 @@ function Carousel({ images }: { images: Image[] }) {
       <div className="flex items-start gap-8">
         <div className="flex flex-col items-center gap-2 py-2">
           {images.map((image, i) => (
+
             <button
               onClick={(en) => setSelectedImage(image)}
               className={
@@ -22,7 +23,7 @@ function Carousel({ images }: { images: Image[] }) {
               }
               key={image.id}
             >
-              {/*<pre>{JSON.stringify(image.id)}</pre>*/}
+              {/*<pre>{JSON.stringify(image.thumb)}</pre>*/}
               <img
                 src={image.thumb ? image.thumb : "/"}
                 alt=""

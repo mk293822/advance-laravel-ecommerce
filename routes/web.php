@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StripeController;
+use App\Http\Controllers\VendorController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -17,6 +19,12 @@ Route::controller(CartController::class)->group(function () {
     Route::delete('/cart/{product_id}', 'destroy')->name('cart.destroy');
 });
 
+Route::post('/stripe/webhook', [StripeController::class, 'webhook'])->name('stripe.webhook');
+
+Route::get('/s/{vendor:store_name}', [VendorController::class, 'profile'])->name('vendor.profile');
+
+Route::get('/d/{department:slug}', [ProductController::class, 'byDepartment'])->name('product.byDepartment');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -24,6 +32,18 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware(['verified'])->group(function () {
       Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+
+      Route::get('stripe/success', [StripeController::class, 'success'])->name('stripe.success');
+
+      Route::get('stripe/failure', [StripeController::class, 'failure'])->name('stripe.failure');
+
+      Route::post('/become-a-vendor', [VendorController::class, 'store'])->name('vendor.store');
+
+      Route::post('/stripe/connect', [StripeController::class, 'connect'])
+        ->name('stripe.connect')
+        ->middleware(['role:'. \App\Enums\RolesEnum::Vendor->value]);
+
+
     });
 });
 

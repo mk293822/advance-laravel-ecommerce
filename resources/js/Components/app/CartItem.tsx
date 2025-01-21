@@ -70,11 +70,13 @@ function CartItem(
               <div className={error ? "tooltip tooltip-open tooltip-error": ""} data-tip={error}>
                 <TextInput type='number'
                            defaultValue={item.quantity}
-                           onBlur={handleQuantityChange}
+                           min={1}
+
+                           onBlur ={()=>handleQuantityChange}
                            className='input-sm w-16'>
                 </TextInput>
                 <button onClick={()=> onDeleteClick()} className="btn btn-sm btn-ghost">Delete</button>
-                <button className="btn btn-sm btn-ghost">Save for Later</button>
+                <button className="btn btn-sm btn-ghost" onClick={()=> onDeleteClick()}>Save for Later</button>
               </div>
                 <div className="font-bold text-lg">
                   <CurrencyFormatter amount={item.price * item.quantity}/>

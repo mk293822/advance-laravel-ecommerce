@@ -18,16 +18,18 @@ class ProductListResource extends JsonResource
           'id'=> $this->id,
           'title' => $this->title,
           'slug' => $this->slug,
-          'price' => $this->price,
+          'price' => $this->getFirstPrice(),
           'quantity'=> $this->quantity,
-          'image'=> $this->getFirstMediaUrl('images', 'small'),
+          'image'=> $this->getFirstImageUrl(),
           'user' =>[
             'name'=>$this->user->name,
             'id'=>$this->user->id,
+            'store_name'=>$this->user->vendor->store_name,
           ],
           'department'=>[
             'id'=>$this->department->id,
             'name'=>$this->department->name,
+            'slug'=>$this->department->slug,
           ]
         ];
     }
