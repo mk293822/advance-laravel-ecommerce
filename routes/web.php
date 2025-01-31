@@ -10,7 +10,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\ProductController;
 
 Route::get('/', [ProductController::class, 'index'])->name('dashboard');
-Route::get('/product/{product:slug}', [ProductController::class, 'show'])->name('product.show');
+Route::get('/{product:slug}', [ProductController::class, 'show'])->name('product.show');
 
 Route::controller(CartController::class)->group(function () {
     Route::get('/cart', 'index')->name('cart.index');
@@ -31,19 +31,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::middleware(['verified'])->group(function () {
-      Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+        Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 
-      Route::get('stripe/success', [StripeController::class, 'success'])->name('stripe.success');
+        Route::get('stripe/success', [StripeController::class, 'success'])->name('stripe.success');
 
-      Route::get('stripe/failure', [StripeController::class, 'failure'])->name('stripe.failure');
+        Route::get('stripe/failure', [StripeController::class, 'failure'])->name('stripe.failure');
 
-      Route::post('/become-a-vendor', [VendorController::class, 'store'])->name('vendor.store');
+        Route::post('/become-a-vendor', [VendorController::class, 'store'])->name('vendor.store');
 
-      Route::post('/stripe/connect', [StripeController::class, 'connect'])
-        ->name('stripe.connect')
-        ->middleware(['role:'. \App\Enums\RolesEnum::Vendor->value]);
-
-
+        Route::post('/stripe/connect', [StripeController::class, 'connect'])
+            ->name('stripe.connect')
+            ->middleware(['role:' . \App\Enums\RolesEnum::Vendor->value]);
     });
 });
 

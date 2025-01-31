@@ -1,6 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
-import {PageProps, Product, VariationType, VariationTypeOption} from "@/types";
-import {Head, Link, router, useForm, usePage} from "@inertiajs/react";
+import {
+  PageProps,
+  Product,
+  VariationType,
+  VariationTypeOption,
+} from "@/types";
+import { Head, Link, router, useForm, usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import Carousel from "@/Components/core/Carousel";
 import CurrencyFormatter from "@/Components/core/CurrencyFormatter";
@@ -9,8 +14,8 @@ import { arraysAreEqual } from "@/helpers";
 function Show({
   product,
   variationOptions,
-  appName
-}: PageProps<{product: Product, variationOptions: number[];}>) {
+  appName,
+}: PageProps<{ product: Product; variationOptions: number[] }>) {
   const form = useForm<{
     option_ids: Record<string, number>;
     quantity: number;
@@ -205,17 +210,16 @@ function Show({
     <AuthenticatedLayout>
       <Head>
         <title>{product.title}</title>
-        <meta name='title' content={product.meta_title || product.title}/>
-        <meta name='description' content={product.meta_description}/>
-        <link rel="canonical" href={route('product.show', product.slug)}/>
+        <meta name="title" content={product.meta_title || product.title} />
+        <meta name="description" content={product.meta_description} />
+        <link rel="canonical" href={route("product.show", product.slug)} />
 
-        <meta property="og:title" content={product.title}/>
-        <meta property="og:image" content={images[0]?.small}/>
-        <meta property="og:description" content={product.meta_description}/>
-        <meta property="og:url" content={route('product.show', product.slug)}/>
-        <meta property="og:type" content="product"/>
-        <meta property="og:site_name" content={appName}/>
-
+        <meta property="og:title" content={product.title} />
+        <meta property="og:image" content={images[0]?.small} />
+        <meta property="og:description" content={product.meta_description} />
+        <meta property="og:url" content={route("product.show", product.slug)} />
+        <meta property="og:type" content="product" />
+        <meta property="og:site_name" content={appName} />
       </Head>
 
       <div className="container mx-auto p-8">
@@ -226,14 +230,25 @@ function Show({
           <div className="col-span-6">
             <h1 className="text-2xl">{product.title}</h1>
 
-            <p className={'mb-8'}>
-              by <Link href={route('vendor.profile', product.user.store_name)}
-                       className='hover:underline'>{product.user.name}</Link>&nbsp;
-              in <Link href={route('product.byDepartment', product.department.slug)} className='hover:underline'>{product.department.name}</Link>
+            <p className={"mb-8"}>
+              by{" "}
+              <Link
+                href={route("vendor.profile", product.user.store_name)}
+                className="hover:underline"
+              >
+                {product.user.name}
+              </Link>
+              &nbsp; in{" "}
+              <Link
+                href={route("product.byDepartment", product.department.slug)}
+                className="hover:underline"
+              >
+                {product.department.name}
+              </Link>
             </p>
             <div>
               <div className="text-3xl font-semibold mb-4">
-                <CurrencyFormatter amount={computedProduct.price}/>
+                <CurrencyFormatter amount={computedProduct.price} />
               </div>
             </div>
             {renderProductVariationTypes()}
@@ -247,7 +262,7 @@ function Show({
             <b className="text-xl">About this Item</b>
             <div
               className="wysiwyg-output"
-              dangerouslySetInnerHTML={{__html: product.description}}
+              dangerouslySetInnerHTML={{ __html: product.description }}
             />
           </div>
         </div>
