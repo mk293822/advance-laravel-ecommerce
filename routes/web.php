@@ -9,8 +9,15 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\ProductController;
 
-Route::get('/', [ProductController::class, 'index'])->name('dashboard');
-Route::get('/{product:slug}', [ProductController::class, 'show'])->name('product.show');
+Route::get('', [ProductController::class, 'index'])->name('dashboard');
+require __DIR__ . '/auth.php';
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
 
 Route::controller(CartController::class)->group(function () {
     Route::get('/cart', 'index')->name('cart.index');
@@ -24,11 +31,9 @@ Route::post('/stripe/webhook', [StripeController::class, 'webhook'])->name('stri
 Route::get('/s/{vendor:store_name}', [VendorController::class, 'profile'])->name('vendor.profile');
 
 Route::get('/d/{department:slug}', [ProductController::class, 'byDepartment'])->name('product.byDepartment');
+Route::get('/{product:slug}', [ProductController::class, 'show'])->name('product.show');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::middleware(['verified'])->group(function () {
         Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
@@ -45,4 +50,3 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-require __DIR__ . '/auth.php';
